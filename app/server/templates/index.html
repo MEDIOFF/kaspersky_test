@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <form>
+            <input type="text" minlength="1">
+            <button type="submit">Отправить в очередь</button>
+        </form>
+        <div>
+            <table border="1">
+                <tr>
+                    <th>task_id</th>
+                    <th>start_time</th>
+                    <th>finish_time</th>
+                    <th>status</th>
+                </tr>
+                {% for task in  tasks %}
+                    <tr>
+                        <td>{{ task.task_id }}</td>
+                        <td>{{ task.start_time }}</td>
+                        <td>{{ task.finish_time }}</td>
+                        <td>{{ task.status }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+{% block script %}
+    <script>
+    let form = document.querySelector("form")
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault()
+        let inp = document.querySelector("input")
+        let data = inp.value
+        res = fetch("http://127.0.0.1:8003/api/v1/createTask", {
+            body: JSON.stringify({data: data}),
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+        res.then((json) => document.location.reload())
+    })
+    </script>
+{% endblock script %}

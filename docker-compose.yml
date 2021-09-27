@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  app:
+    ports:
+      - 8003:8080
+    build:
+      context: ./
+    command: python main.py
+    volumes:
+      - ./app:/app
+    depends_on:
+      - db
+      - rabbitmq
+    env_file:
+      - .env
+  db:
+    image: bitnami/mongodb:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGODB_USERNAME=test
+      - MONGODB_PASSWORD=test
+      - MONGODB_DATABASE=kaspersky_test
+  rabbitmq:
+    image: rabbitmq:3.9.7-management-alpine
+
+volumes:
+  mongo_data:
